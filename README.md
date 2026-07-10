@@ -6,7 +6,7 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
 
-Ceci est l'API Backend officielle pour les plateformes web du **GROUPE ARASH** (Vitrine publique et Backoffice d'administration). 
+Ceci est l'API Backend officielle pour les plateformes web du **GROUPE ARASH** (Vitrine publique et Backoffice d'administration).
 Le projet est architecturé autour de **NestJS**, **Prisma ORM** (avec base de données Neon PostgreSQL), et gère l'upload sécurisé de fichiers via **Vercel Blob** (Client-Upload).
 
 ---
@@ -36,7 +36,7 @@ Chaque module technique possède sa propre documentation exhaustive :
 - [Module Partenaires](./doc/partners.md)
 - [Module Media](./doc/media.md)
 
-*(La documentation interactive des endpoints **Swagger** est disponible sur la route `/api/docs` au lancement de l'API).*
+_(La documentation interactive des endpoints **Swagger** est disponible sur la route `/api/docs` au lancement de l'API)._
 
 ---
 
@@ -97,9 +97,11 @@ L'API tournera sur l'URL de base : `http://localhost:3000/api/v1`
 Cette API est prête à être déployée sur n'importe quelle plateforme Node.js standard (Render, Railway, VPS, Vercel etc.).
 
 **Points de vérification pré-déploiement :**
+
 - Variables d'environnement de production injectées (`DATABASE_URL`, `FRONTEND_URL`, etc.).
 - Les commandes de build sont : `npx prisma generate && npm run build`
 - La commande de démarrage est : `npm run start:prod`
 
 ---
-*Propulsé par le GROUPE ARASH.*
+
+_Propulsé par le GROUPE ARASH._
