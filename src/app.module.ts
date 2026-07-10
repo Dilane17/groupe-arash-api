@@ -11,6 +11,7 @@ import { CareersModule } from './careers/careers.module';
 import { NewsModule } from './news/news.module';
 import { PartnersModule } from './partners/partners.module';
 import { MediaModule } from './media/media.module';
+import { NewsletterModule } from './newsletter/newsletter.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { MediaModule } from './media/media.module';
     NewsModule,
     PartnersModule,
     MediaModule,
+    NewsletterModule,
   ],
   controllers: [AppController],
   providers: [AppService],

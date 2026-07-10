@@ -20,6 +20,7 @@ const careers_module_1 = require("./careers/careers.module");
 const news_module_1 = require("./news/news.module");
 const partners_module_1 = require("./partners/partners.module");
 const media_module_1 = require("./media/media.module");
+const newsletter_module_1 = require("./newsletter/newsletter.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -41,6 +42,7 @@ exports.AppModule = AppModule = __decorate([
             news_module_1.NewsModule,
             partners_module_1.PartnersModule,
             media_module_1.MediaModule,
+            newsletter_module_1.NewsletterModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

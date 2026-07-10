@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query, Req, UploadedFile, UseInterceptors, BadRequestException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { CareersService } from './careers.service';
 import { CreateJobOfferDto } from './dto/create-job-offer.dto';
@@ -10,7 +10,8 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { JobApplicationStatus } from '@prisma/client';
-import { generateClientTokenFromReadWriteToken } from '@vercel/blob/client';
+import { put } from '@vercel/blob';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Careers')
 @Controller('careers')
@@ -72,44 +73,48 @@ export class CareersController {
 
   // --- VERCEL BLOB UPLOAD ---
 
-  @Post('upload-url')
+  @Post('upload')
   @UseGuards(ThrottlerGuard)
-  @Throttle({ default: { limit: 3, ttl: 600000 } }) // 3 requêtes / 10 min
-  @ApiOperation({ summary: 'Générer un token d\'upload pour le CV (Public)' })
-  @ApiResponse({ status: 201, description: 'Token généré.' })
-  async generateUploadUrl(@Body('filename') filename: string) {
-    if (!filename) {
-      throw new Error('Le nom du fichier est requis');
+  @Throttle({ default: { limit: 15, ttl: 300000 } }) // 15 requêtes / 5 min
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: 'Uploader un CV directement (Public)' })
+  @ApiResponse({ status: 201, description: 'CV uploadé.' })
+  async uploadCv(@UploadedFile() file: any) {
+    if (!file) {
+      throw new BadRequestException('Aucun fichier fourni');
     }
 
     // Sécurisation basique du nom de fichier
-    const safeFilename = filename.replace(/[^a-zA-Z0-9.-]/g, '_');
+    const safeFilename = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
     const pathname = `cv/${Date.now()}-${safeFilename}`;
 
-    const clientToken = await generateClientTokenFromReadWriteToken({
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-      allowedContentTypes: [
-        'application/pdf',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      ],
-      maximumSizeInBytes: 5 * 1024 * 1024, // 5 MB
-      pathname,
-      validUntil: Date.now() + 1000 * 60 * 5, // Valid for 5 minutes
-    });
+    try {
+      const blob = await put(pathname, file.buffer, {
+        access: 'private',
+        token: process.env.BLOB_READ_WRITE_TOKEN,
+      });
 
-    return { type: 'blob', clientPayload: clientToken };
+      return { success: true, url: blob.url };
+    } catch (error) {
+      console.error("Vercel Blob Upload Error:", error);
+      return { success: false, message: error.message || error.toString() };
+    }
   }
 
   // --- APPLICATIONS ---
 
   @Post('apply')
   @UseGuards(ThrottlerGuard)
-  @Throttle({ default: { limit: 5, ttl: 600000 } }) // 5 requêtes / 10 min
+  @Throttle({ default: { limit: 15, ttl: 300000 } }) // 15 requêtes / 5 min
   @ApiOperation({ summary: 'Soumettre une candidature (Public)' })
   @ApiResponse({ status: 201, description: 'Candidature enregistrée et emails envoyés.' })
-  createApplication(@Body() createJobApplicationDto: CreateJobApplicationDto) {
-    return this.careersService.createApplication(createJobApplicationDto);
+  async createApplication(@Body() createJobApplicationDto: CreateJobApplicationDto) {
+    try {
+      return await this.careersService.createApplication(createJobApplicationDto);
+    } catch (e) {
+      console.error("ERROR IN createApplication:", e);
+      return { success: false, message: e.message || e.toString() };
+    }
   }
 
   @Get('applications/list')

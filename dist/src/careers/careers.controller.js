@@ -25,7 +25,8 @@ const roles_guard_1 = require("../auth/guards/roles.guard");
 const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const throttler_1 = require("@nestjs/throttler");
 const client_1 = require("@prisma/client");
-const client_2 = require("@vercel/blob/client");
+const blob_1 = require("@vercel/blob");
+const platform_express_1 = require("@nestjs/platform-express");
 let CareersController = class CareersController {
     careersService;
     constructor(careersService) {
@@ -49,27 +50,32 @@ let CareersController = class CareersController {
     findAllJobOffersAdmin() {
         return this.careersService.findAllJobOffersAdmin();
     }
-    async generateUploadUrl(filename) {
-        if (!filename) {
-            throw new Error('Le nom du fichier est requis');
+    async uploadCv(file) {
+        if (!file) {
+            throw new common_1.BadRequestException('Aucun fichier fourni');
         }
-        const safeFilename = filename.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const safeFilename = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
         const pathname = `cv/${Date.now()}-${safeFilename}`;
-        const clientToken = await (0, client_2.generateClientTokenFromReadWriteToken)({
-            token: process.env.BLOB_READ_WRITE_TOKEN,
-            allowedContentTypes: [
-                'application/pdf',
-                'application/msword',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            ],
-            maximumSizeInBytes: 5 * 1024 * 1024,
-            pathname,
-            validUntil: Date.now() + 1000 * 60 * 5,
-        });
-        return { type: 'blob', clientPayload: clientToken };
+        try {
+            const blob = await (0, blob_1.put)(pathname, file.buffer, {
+                access: 'private',
+                token: process.env.BLOB_READ_WRITE_TOKEN,
+            });
+            return { success: true, url: blob.url };
+        }
+        catch (error) {
+            console.error("Vercel Blob Upload Error:", error);
+            return { success: false, message: error.message || error.toString() };
+        }
     }
-    createApplication(createJobApplicationDto) {
-        return this.careersService.createApplication(createJobApplicationDto);
+    async createApplication(createJobApplicationDto) {
+        try {
+            return await this.careersService.createApplication(createJobApplicationDto);
+        }
+        catch (e) {
+            console.error("ERROR IN createApplication:", e);
+            return { success: false, message: e.message || e.toString() };
+        }
     }
     findApplications(page, limit, jobOfferId, status) {
         return this.careersService.findApplications(page ? +page : 1, limit ? +limit : 10, jobOfferId, status);
@@ -142,26 +148,27 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], CareersController.prototype, "findAllJobOffersAdmin", null);
 __decorate([
-    (0, common_1.Post)('upload-url'),
+    (0, common_1.Post)('upload'),
     (0, common_1.UseGuards)(throttler_1.ThrottlerGuard),
-    (0, throttler_1.Throttle)({ default: { limit: 3, ttl: 600000 } }),
-    (0, swagger_1.ApiOperation)({ summary: 'Générer un token d\'upload pour le CV (Public)' }),
-    (0, swagger_1.ApiResponse)({ status: 201, description: 'Token généré.' }),
-    __param(0, (0, common_1.Body)('filename')),
+    (0, throttler_1.Throttle)({ default: { limit: 15, ttl: 300000 } }),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    (0, swagger_1.ApiOperation)({ summary: 'Uploader un CV directement (Public)' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'CV uploadé.' }),
+    __param(0, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], CareersController.prototype, "generateUploadUrl", null);
+], CareersController.prototype, "uploadCv", null);
 __decorate([
     (0, common_1.Post)('apply'),
     (0, common_1.UseGuards)(throttler_1.ThrottlerGuard),
-    (0, throttler_1.Throttle)({ default: { limit: 5, ttl: 600000 } }),
+    (0, throttler_1.Throttle)({ default: { limit: 15, ttl: 300000 } }),
     (0, swagger_1.ApiOperation)({ summary: 'Soumettre une candidature (Public)' }),
     (0, swagger_1.ApiResponse)({ status: 201, description: 'Candidature enregistrée et emails envoyés.' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_job_application_dto_1.CreateJobApplicationDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], CareersController.prototype, "createApplication", null);
 __decorate([
     (0, common_1.Get)('applications/list'),

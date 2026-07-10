@@ -19,6 +19,7 @@ let PrismaService = class PrismaService extends client_1.PrismaClient {
         const pool = new pg_1.Pool({
             connectionString: process.env.DATABASE_URL,
             ssl: true,
+            connectionTimeoutMillis: 30000,
         });
         const adapter = new adapter_pg_1.PrismaPg(pool);
         super({ adapter });

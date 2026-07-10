@@ -8,16 +8,16 @@ export declare class MediaService {
         url: string;
         id: string;
         createdAt: Date;
-        type: import("@prisma/client").$Enums.MediaType;
         title: string;
+        type: import("@prisma/client").$Enums.MediaType;
         category: string;
     }>;
     deleteMediaItem(id: string): Promise<{
         url: string;
         id: string;
         createdAt: Date;
-        type: import("@prisma/client").$Enums.MediaType;
         title: string;
+        type: import("@prisma/client").$Enums.MediaType;
         category: string;
     }>;
     findMedia(page?: number, limit?: number, type?: MediaType, category?: string): Promise<{
@@ -25,8 +25,8 @@ export declare class MediaService {
             url: string;
             id: string;
             createdAt: Date;
-            type: import("@prisma/client").$Enums.MediaType;
             title: string;
+            type: import("@prisma/client").$Enums.MediaType;
             category: string;
         }[];
         meta: {
