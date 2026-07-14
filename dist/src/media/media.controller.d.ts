@@ -6,11 +6,11 @@ export declare class MediaController {
     constructor(mediaService: MediaService);
     findMedia(page?: string, limit?: string, type?: MediaType, category?: string): Promise<{
         data: {
-            url: string;
             id: string;
             createdAt: Date;
-            title: string;
             type: import("@prisma/client").$Enums.MediaType;
+            title: string;
+            url: string;
             category: string;
         }[];
         meta: {
@@ -25,19 +25,19 @@ export declare class MediaController {
         clientPayload: string;
     }>;
     createMediaItem(createMediaItemDto: CreateMediaItemDto): Promise<{
-        url: string;
         id: string;
         createdAt: Date;
-        title: string;
         type: import("@prisma/client").$Enums.MediaType;
+        title: string;
+        url: string;
         category: string;
     }>;
     deleteMediaItem(id: string): Promise<{
-        url: string;
         id: string;
         createdAt: Date;
-        title: string;
         type: import("@prisma/client").$Enums.MediaType;
+        title: string;
+        url: string;
         category: string;
     }>;
 }

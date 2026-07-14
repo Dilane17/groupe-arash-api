@@ -14,15 +14,15 @@ export declare class AuthController {
         };
     }>;
     getProfile(req: any): Promise<{
-        id: string;
         email: string;
+        id: string;
         name: string;
         role: import("@prisma/client").$Enums.AdminRole;
         createdAt: Date;
     }>;
     updateProfile(req: any, dto: UpdateProfileDto): Promise<{
-        id: string;
         email: string;
+        id: string;
         name: string;
         role: import("@prisma/client").$Enums.AdminRole;
     }>;

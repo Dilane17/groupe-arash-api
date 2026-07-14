@@ -16,15 +16,15 @@ export declare class AuthService {
         };
     }>;
     getProfile(userId: string): Promise<{
-        id: string;
         email: string;
+        id: string;
         name: string;
         role: import("@prisma/client").$Enums.AdminRole;
         createdAt: Date;
     }>;
     updateProfile(userId: string, dto: UpdateProfileDto): Promise<{
-        id: string;
         email: string;
+        id: string;
         name: string;
         role: import("@prisma/client").$Enums.AdminRole;
     }>;

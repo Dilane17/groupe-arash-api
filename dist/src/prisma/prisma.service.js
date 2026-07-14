@@ -14,15 +14,22 @@ const common_1 = require("@nestjs/common");
 const client_1 = require("@prisma/client");
 const pg_1 = require("pg");
 const adapter_pg_1 = require("@prisma/adapter-pg");
+const config_1 = require("@nestjs/config");
 let PrismaService = class PrismaService extends client_1.PrismaClient {
-    constructor() {
+    configService;
+    constructor(configService) {
+        const databaseUrl = configService.get('DATABASE_URL');
+        if (!databaseUrl) {
+            throw new Error("DATABASE_URL is not defined in environment variables");
+        }
         const pool = new pg_1.Pool({
-            connectionString: process.env.DATABASE_URL,
+            connectionString: databaseUrl,
             ssl: true,
             connectionTimeoutMillis: 30000,
         });
         const adapter = new adapter_pg_1.PrismaPg(pool);
         super({ adapter });
+        this.configService = configService;
     }
     async onModuleInit() {
         await this.$connect();
@@ -34,6 +41,6 @@ let PrismaService = class PrismaService extends client_1.PrismaClient {
 exports.PrismaService = PrismaService;
 exports.PrismaService = PrismaService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [config_1.ConfigService])
 ], PrismaService);
 //# sourceMappingURL=prisma.service.js.map

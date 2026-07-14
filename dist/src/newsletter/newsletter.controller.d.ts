@@ -12,8 +12,8 @@ export declare class NewsletterController {
     }>;
     getSubscribers(page: number, limit: number): Promise<{
         data: {
-            id: string;
             email: string;
+            id: string;
             isActive: boolean;
             subscribedAt: Date;
             unsubscribedAt: Date | null;

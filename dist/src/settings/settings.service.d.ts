@@ -4,8 +4,8 @@ export declare class SettingsService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     get(): Promise<{
-        id: string;
         email: string;
+        id: string;
         updatedAt: Date;
         phone: string;
         address: string;
@@ -16,8 +16,8 @@ export declare class SettingsService {
         youtubeUrl: string;
     }>;
     update(dto: UpdateSettingsDto): Promise<{
-        id: string;
         email: string;
+        id: string;
         updatedAt: Date;
         phone: string;
         address: string;

@@ -38,7 +38,7 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Obtenir les informations du profil' })
   getProfile(@Req() req: any) {
-    return this.authService.getProfile(req.user.sub);
+    return this.authService.getProfile(req.user.id);
   }
 
   @Patch('profile')
@@ -46,7 +46,7 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Mettre à jour les informations du profil' })
   updateProfile(@Req() req: any, @Body() dto: UpdateProfileDto) {
-    return this.authService.updateProfile(req.user.sub, dto);
+    return this.authService.updateProfile(req.user.id, dto);
   }
 
   @Patch('profile/password')
@@ -54,6 +54,6 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Mettre à jour le mot de passe' })
   updatePassword(@Req() req: any, @Body() dto: UpdatePasswordDto) {
-    return this.authService.updatePassword(req.user.sub, dto);
+    return this.authService.updatePassword(req.user.id, dto);
   }
 }

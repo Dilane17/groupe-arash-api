@@ -28,13 +28,13 @@ let AuthController = class AuthController {
         return this.authService.login(loginDto);
     }
     getProfile(req) {
-        return this.authService.getProfile(req.user.sub);
+        return this.authService.getProfile(req.user.id);
     }
     updateProfile(req, dto) {
-        return this.authService.updateProfile(req.user.sub, dto);
+        return this.authService.updateProfile(req.user.id, dto);
     }
     updatePassword(req, dto) {
-        return this.authService.updatePassword(req.user.sub, dto);
+        return this.authService.updatePassword(req.user.id, dto);
     }
 };
 exports.AuthController = AuthController;

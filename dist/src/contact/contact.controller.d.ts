@@ -11,12 +11,12 @@ export declare class ContactController {
     }>;
     findAll(page?: string, limit?: string, status?: ContactMessageStatus): Promise<{
         data: {
-            id: string;
             email: string;
+            id: string;
             createdAt: Date;
-            message: string;
-            subject: string;
             fullName: string;
+            subject: string;
+            message: string;
             status: import("@prisma/client").$Enums.ContactMessageStatus;
         }[];
         meta: {
@@ -27,12 +27,12 @@ export declare class ContactController {
         };
     }>;
     updateStatus(id: string, updateContactStatusDto: UpdateContactStatusDto): Promise<{
-        id: string;
         email: string;
+        id: string;
         createdAt: Date;
-        message: string;
-        subject: string;
         fullName: string;
+        subject: string;
+        message: string;
         status: import("@prisma/client").$Enums.ContactMessageStatus;
     }>;
 }

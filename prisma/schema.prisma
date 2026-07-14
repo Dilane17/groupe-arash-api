@@ -6,11 +6,6 @@ datasource db {
   provider = "postgresql"
 }
 
-enum AdminRole {
-  ADMIN
-  EDITOR
-}
-
 model AdminUser {
   id           String        @id @default(cuid())
   email        String        @unique
@@ -24,12 +19,6 @@ model AdminUser {
   @@index([email])
 }
 
-enum ContactMessageStatus {
-  NEW
-  READ
-  ARCHIVED
-}
-
 model ContactMessage {
   id        String               @id @default(cuid())
   fullName  String
@@ -38,13 +27,6 @@ model ContactMessage {
   message   String
   status    ContactMessageStatus @default(NEW)
   createdAt DateTime             @default(now())
-}
-
-enum JobType {
-  CDI
-  CDD
-  STAGE
-  FREELANCE
 }
 
 model JobOffer {
@@ -64,16 +46,8 @@ model JobOffer {
   @@index([slug])
 }
 
-enum JobApplicationStatus {
-  RECEIVED
-  REVIEWED
-  REJECTED
-  ACCEPTED
-}
-
 model JobApplication {
   id         String               @id @default(cuid())
-  jobOffer   JobOffer?            @relation(fields: [jobOfferId], references: [id])
   jobOfferId String?
   fullName   String
   email      String
@@ -82,12 +56,7 @@ model JobApplication {
   cvUrl      String
   status     JobApplicationStatus @default(RECEIVED)
   createdAt  DateTime             @default(now())
-}
-
-enum ArticleCategory {
-  ACTUALITE
-  EVENEMENT
-  COMMUNIQUE
+  jobOffer   JobOffer?            @relation(fields: [jobOfferId], references: [id])
 }
 
 model NewsArticle {
@@ -100,18 +69,12 @@ model NewsArticle {
   category      ArticleCategory
   isPublished   Boolean         @default(false)
   publishedAt   DateTime?
-  author        AdminUser       @relation(fields: [authorId], references: [id])
   authorId      String
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+  author        AdminUser       @relation(fields: [authorId], references: [id])
 
   @@index([slug])
-}
-
-enum PartnerCategory {
-  INSTITUTIONNEL
-  TECHNIQUE
-  COMMERCIAL
 }
 
 model Partner {
@@ -123,12 +86,6 @@ model Partner {
   isActive   Boolean         @default(true)
   order      Int             @default(0)
   createdAt  DateTime        @default(now())
-}
-
-enum MediaType {
-  IMAGE
-  VIDEO
-  DOCUMENT
 }
 
 model MediaItem {
@@ -151,14 +108,57 @@ model NewsletterSubscriber {
 }
 
 model SiteSettings {
-  id             String   @id @default("singleton")
-  phone          String   @default("")
-  email          String   @default("")
-  address        String   @default("")
-  city           String   @default("Cotonou, Bénin")
-  linkedinUrl    String   @default("")
-  facebookUrl    String   @default("")
-  instagramUrl   String   @default("")
-  youtubeUrl     String   @default("")
-  updatedAt      DateTime @updatedAt
+  id           String   @id @default("singleton")
+  phone        String   @default("")
+  email        String   @default("")
+  address      String   @default("")
+  city         String   @default("Cotonou, Bénin")
+  linkedinUrl  String   @default("")
+  facebookUrl  String   @default("")
+  instagramUrl String   @default("")
+  youtubeUrl   String   @default("")
+  updatedAt    DateTime @updatedAt
+}
+
+enum AdminRole {
+  ADMIN
+  EDITOR
+}
+
+enum ContactMessageStatus {
+  NEW
+  READ
+  ARCHIVED
+}
+
+enum JobType {
+  CDI
+  CDD
+  STAGE
+  FREELANCE
+}
+
+enum JobApplicationStatus {
+  RECEIVED
+  REVIEWED
+  REJECTED
+  ACCEPTED
+}
+
+enum ArticleCategory {
+  ACTUALITE
+  EVENEMENT
+  COMMUNIQUE
+}
+
+enum PartnerCategory {
+  INSTITUTIONNEL
+  TECHNIQUE
+  COMMERCIAL
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  DOCUMENT
 }
