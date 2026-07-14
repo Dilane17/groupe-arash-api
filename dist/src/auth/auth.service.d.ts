@@ -1,6 +1,7 @@
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
+import { UpdateProfileDto, UpdatePasswordDto } from './dto/update-profile.dto';
 export declare class AuthService {
     private prisma;
     private jwtService;
@@ -13,5 +14,21 @@ export declare class AuthService {
             name: string;
             role: import("@prisma/client").$Enums.AdminRole;
         };
+    }>;
+    getProfile(userId: string): Promise<{
+        id: string;
+        email: string;
+        name: string;
+        role: import("@prisma/client").$Enums.AdminRole;
+        createdAt: Date;
+    }>;
+    updateProfile(userId: string, dto: UpdateProfileDto): Promise<{
+        id: string;
+        email: string;
+        name: string;
+        role: import("@prisma/client").$Enums.AdminRole;
+    }>;
+    updatePassword(userId: string, dto: UpdatePasswordDto): Promise<{
+        success: boolean;
     }>;
 }

@@ -23,13 +23,16 @@ async function bootstrap() {
         forbidNonWhitelisted: true,
         transform: true,
     }));
-    const config = new swagger_1.DocumentBuilder()
-        .setTitle('GROUPE ARASH API')
-        .setDescription('API documentation for Groupe Arash')
-        .setVersion('1.0')
-        .build();
-    const document = swagger_1.SwaggerModule.createDocument(app, config);
-    swagger_1.SwaggerModule.setup('api/docs', app, document);
+    if (process.env.NODE_ENV !== 'production') {
+        const config = new swagger_1.DocumentBuilder()
+            .setTitle('GROUPE ARASH API')
+            .setDescription('API documentation for Groupe Arash')
+            .setVersion('1.0')
+            .addBearerAuth()
+            .build();
+        const document = swagger_1.SwaggerModule.createDocument(app, config);
+        swagger_1.SwaggerModule.setup('api/docs', app, document);
+    }
     await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

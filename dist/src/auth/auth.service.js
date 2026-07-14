@@ -81,6 +81,44 @@ let AuthService = class AuthService {
             }
         };
     }
+    async getProfile(userId) {
+        const user = await this.prisma.adminUser.findUnique({
+            where: { id: userId },
+            select: { id: true, email: true, name: true, role: true, createdAt: true },
+        });
+        if (!user) {
+            throw new common_1.UnauthorizedException('Utilisateur introuvable');
+        }
+        return user;
+    }
+    async updateProfile(userId, dto) {
+        return this.prisma.adminUser.update({
+            where: { id: userId },
+            data: {
+                name: dto.name,
+                email: dto.email,
+            },
+            select: { id: true, email: true, name: true, role: true },
+        });
+    }
+    async updatePassword(userId, dto) {
+        const user = await this.prisma.adminUser.findUnique({ where: { id: userId } });
+        if (!user)
+            throw new common_1.UnauthorizedException('Utilisateur introuvable');
+        if (dto.currentPassword) {
+            const isPasswordValid = await bcrypt.compare(dto.currentPassword, user.passwordHash);
+            if (!isPasswordValid) {
+                throw new common_1.UnauthorizedException('Mot de passe actuel incorrect');
+            }
+        }
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(dto.newPassword, salt);
+        await this.prisma.adminUser.update({
+            where: { id: userId },
+            data: { passwordHash },
+        });
+        return { success: true };
+    }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([

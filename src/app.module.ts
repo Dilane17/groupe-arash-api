@@ -12,6 +12,9 @@ import { NewsModule } from './news/news.module';
 import { PartnersModule } from './partners/partners.module';
 import { MediaModule } from './media/media.module';
 import { NewsletterModule } from './newsletter/newsletter.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { UsersModule } from './users/users.module';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -31,6 +34,9 @@ import { NewsletterModule } from './newsletter/newsletter.module';
     PartnersModule,
     MediaModule,
     NewsletterModule,
+    DashboardModule,
+    UsersModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

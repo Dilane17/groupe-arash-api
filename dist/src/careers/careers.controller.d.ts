@@ -9,68 +9,68 @@ export declare class CareersController {
     constructor(careersService: CareersService);
     findActiveJobOffers(): Promise<{
         id: string;
-        title: string;
+        createdAt: Date;
+        updatedAt: Date;
         slug: string;
+        title: string;
         department: string;
         location: string;
         type: import("@prisma/client").$Enums.JobType;
         description: string;
         requirements: string;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
     }[]>;
     findJobOfferBySlug(slug: string): Promise<{
         id: string;
-        title: string;
+        createdAt: Date;
+        updatedAt: Date;
         slug: string;
+        title: string;
         department: string;
         location: string;
         type: import("@prisma/client").$Enums.JobType;
         description: string;
         requirements: string;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     createJobOffer(createJobOfferDto: CreateJobOfferDto): Promise<{
         id: string;
-        title: string;
+        createdAt: Date;
+        updatedAt: Date;
         slug: string;
+        title: string;
         department: string;
         location: string;
         type: import("@prisma/client").$Enums.JobType;
         description: string;
         requirements: string;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     updateJobOffer(id: string, updateJobOfferDto: UpdateJobOfferDto): Promise<{
         id: string;
-        title: string;
+        createdAt: Date;
+        updatedAt: Date;
         slug: string;
+        title: string;
         department: string;
         location: string;
         type: import("@prisma/client").$Enums.JobType;
         description: string;
         requirements: string;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     deleteJobOffer(id: string): Promise<{
         id: string;
-        title: string;
+        createdAt: Date;
+        updatedAt: Date;
         slug: string;
+        title: string;
         department: string;
         location: string;
         type: import("@prisma/client").$Enums.JobType;
         description: string;
         requirements: string;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     findAllJobOffersAdmin(): Promise<({
         _count: {
@@ -78,16 +78,16 @@ export declare class CareersController {
         };
     } & {
         id: string;
-        title: string;
+        createdAt: Date;
+        updatedAt: Date;
         slug: string;
+        title: string;
         department: string;
         location: string;
         type: import("@prisma/client").$Enums.JobType;
         description: string;
         requirements: string;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
     })[]>;
     uploadCv(file: any): Promise<{
         success: boolean;
@@ -112,14 +112,14 @@ export declare class CareersController {
             } | null;
         } & {
             id: string;
+            email: string;
             createdAt: Date;
             message: string;
             fullName: string;
-            email: string;
-            phone: string;
-            cvUrl: string;
             status: import("@prisma/client").$Enums.JobApplicationStatus;
             jobOfferId: string | null;
+            phone: string;
+            cvUrl: string;
         })[];
         meta: {
             total: number;
@@ -130,13 +130,13 @@ export declare class CareersController {
     }>;
     updateApplicationStatus(id: string, updateApplicationStatusDto: UpdateApplicationStatusDto): Promise<{
         id: string;
+        email: string;
         createdAt: Date;
         message: string;
         fullName: string;
-        email: string;
-        phone: string;
-        cvUrl: string;
         status: import("@prisma/client").$Enums.JobApplicationStatus;
         jobOfferId: string | null;
+        phone: string;
+        cvUrl: string;
     }>;
 }

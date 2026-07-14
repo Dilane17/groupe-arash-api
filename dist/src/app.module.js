@@ -21,6 +21,9 @@ const news_module_1 = require("./news/news.module");
 const partners_module_1 = require("./partners/partners.module");
 const media_module_1 = require("./media/media.module");
 const newsletter_module_1 = require("./newsletter/newsletter.module");
+const dashboard_module_1 = require("./dashboard/dashboard.module");
+const users_module_1 = require("./users/users.module");
+const settings_module_1 = require("./settings/settings.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -43,6 +46,9 @@ exports.AppModule = AppModule = __decorate([
             partners_module_1.PartnersModule,
             media_module_1.MediaModule,
             newsletter_module_1.NewsletterModule,
+            dashboard_module_1.DashboardModule,
+            users_module_1.UsersModule,
+            settings_module_1.SettingsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

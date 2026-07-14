@@ -149,3 +149,16 @@ model NewsletterSubscriber {
 
   @@map("newsletter_subscribers")
 }
+
+model SiteSettings {
+  id             String   @id @default("singleton")
+  phone          String   @default("")
+  email          String   @default("")
+  address        String   @default("")
+  city           String   @default("Cotonou, Bénin")
+  linkedinUrl    String   @default("")
+  facebookUrl    String   @default("")
+  instagramUrl   String   @default("")
+  youtubeUrl     String   @default("")
+  updatedAt      DateTime @updatedAt
+}
